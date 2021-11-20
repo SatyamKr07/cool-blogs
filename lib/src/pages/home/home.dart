@@ -4,6 +4,7 @@ import 'package:cool_blog/src/pages/add_blog/add_blog.dart';
 import 'package:cool_blog/src/pages/home/views/all_blogs.dart';
 import 'package:cool_blog/src/pages/home/views/category_filter_dropdown.dart';
 import 'package:cool_blog/src/pages/profile/profile_page.dart';
+import 'package:cool_blog/src/pages/search_user/search_user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
@@ -20,6 +21,11 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Cool Blog"),
         actions: [
+          IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Get.to(() => const SearchUser());
+              }),
           InkWell(
             onTap: () {
               Get.to(() => ProfilePage());
@@ -30,7 +36,7 @@ class Home extends StatelessWidget {
                   backgroundImage: NetworkImage(
                       userController.appUser.profilePic.toString())),
             ),
-          )
+          ),
         ],
       ),
       body: ListView(
