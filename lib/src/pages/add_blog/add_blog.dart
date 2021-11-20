@@ -1,3 +1,4 @@
+import 'package:cool_blog/src/central/services/my_logger.dart';
 import 'package:cool_blog/src/central/widgets/build_swiper.dart';
 import 'package:cool_blog/src/controllers/add_blog_controller.dart';
 import 'package:cool_blog/src/pages/add_blog/views/add_pic.dart';
@@ -13,24 +14,36 @@ class AddBlog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Add Blog")),
-        body: ListView(
-          children: [
-            TitleDesc(),
-            CategoryDropdown(),
-            const Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Text("Choose/Click pics"),
+      appBar: AppBar(
+        title: const Text("Add Blog"),
+        actions: [
+          ElevatedButton(
+            onPressed: () async {
+              await addBlogController.uploadImages();
+              logger.d('imagesUrl :${addBlogController.blogModel.picList}');
+            },
+            child: const Text('Upload'),
+          ),
+        ],
+      ),
+      body: ListView(
+        children: [
+          TitleDesc(),
+          CategoryDropdown(),
+          const Padding(
+            padding: EdgeInsets.only(left: 16.0),
+            child: Text("Choose/Click pics"),
+          ),
+          AddPic(),
+          GetBuilder<AddBlogController>(
+            id: "ADD_IMAGES_SWIPER",
+            builder: (_) => BuildSwiper(
+              picList: addBlogController.imagesPath,
+              editPage: true,
             ),
-            AddPic(),
-            GetBuilder<AddBlogController>(
-              id: "ADD_IMAGES_SWIPER",
-              builder: (_) => BuildSwiper(
-                picList: addBlogController.blogModel.picList,
-                editPage: true,
-              ),
-            )
-          ],
-        ));
+          )
+        ],
+      ),
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cool_blog/src/central/services/firebase_storage_service.dart';
 import 'package:cool_blog/src/central/services/image_service.dart';
 import 'package:cool_blog/src/central/services/my_logger.dart';
 import 'package:cool_blog/src/models/blog_model.dart';
@@ -12,12 +13,17 @@ class AddBlogController extends GetxController {
   TextEditingController descCtrl = TextEditingController();
 
   final imageService = Get.find<ImageService>();
+  final firebaseStorageService = Get.find<FirebaseStorageService>();
+  bool isUploading = false;
+
   List<XFile>? multiImages;
+  List<String> imagesPath = [];
   Future pickBlogImageFromGallery() async {
     multiImages = await imageService.getImagesFromGallery();
     if (multiImages != null) {
       for (var element in multiImages!) {
-        blogModel.picList.add(element.path);
+        imagesPath.add(element.path);
+        // blogModel.picList.add(element.path);
       }
       logger.d('exchangeImages ${blogModel.picList}');
       update(['ADD_IMAGES_SWIPER']);
@@ -35,5 +41,19 @@ class AddBlogController extends GetxController {
   void selectCategory(String? category) {
     blogModel.category = category!;
     update(['CATEGORY_DROPDOWN']);
+  }
+
+  Future uploadImages() async {
+    isUploading = true;
+    try {
+      await firebaseStorageService.uploadImageToFirebaseStorage(
+        imagesPath: imagesPath,
+        imagesUrlToStore: blogModel.picList,
+      );
+    } catch (e) {
+      logger.e('error in uploading images $e');
+    } finally {
+      isUploading = false;
+    }
   }
 }
