@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "665212999918",
+    "project_id": "cool-blog-54040",
+    "storage_bucket": "cool-blog-54040.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665212999918:android:293c193d88631fea5d7bff",
+        "android_client_info": {
+          "package_name": "com.example.cool_blog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665212999918-k6gddt0fhuajsgdsdhnva4htjuroe8q5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNHbY-Mxje9OnpcHrAAC48GZDb30U3vIo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665212999918-k6gddt0fhuajsgdsdhnva4htjuroe8q5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
