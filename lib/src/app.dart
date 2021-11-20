@@ -1,5 +1,6 @@
 import 'package:cool_blog/src/central/services/controllers_bindings.dart';
 import 'package:cool_blog/src/pages/home/home.dart';
+import 'package:cool_blog/src/pages/sign_in_screen/sign_in_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -29,41 +30,11 @@ class MyApp extends StatelessWidget {
 
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
-    return FutureBuilder(
-      // Initialize FlutterFire:
-      future: _initialization,
-      builder: (context, snapshot) {
-        // Check for errors
-        if (snapshot.hasError) {
-          return const Text("Somethig went wrong with firebase initilization");
-        }
-
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MyBlogApp(settingsController: settingsController);
-        }
-
-        // Otherwise, show something whilst waiting for initialization to complete
-        return Container();
-      },
-    );
-  }
-}
-
-class MyBlogApp extends StatelessWidget {
-  const MyBlogApp({
-    Key? key,
-    required this.settingsController,
-  }) : super(key: key);
-
-  final SettingsController settingsController;
-
-  @override
-  Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: settingsController,
       builder: (BuildContext context, Widget? child) {
         return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
           initialBinding: ControllerBinding(),
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and
@@ -117,7 +88,7 @@ class MyBlogApp extends StatelessWidget {
               },
             );
           },
-          home: const Home(),
+          home: SignInScreen(),
         );
       },
     );

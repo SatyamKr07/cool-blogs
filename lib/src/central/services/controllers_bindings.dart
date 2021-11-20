@@ -1,4 +1,5 @@
 import 'package:cool_blog/src/central/services/image_service.dart';
+import 'package:cool_blog/src/central/services/user_controller.dart';
 import 'package:cool_blog/src/controllers/add_blog_controller.dart';
 import 'package:cool_blog/src/controllers/home_controller.dart';
 import 'package:get/instance_manager.dart';
@@ -13,5 +14,6 @@ class ControllerBinding extends Bindings {
     Get.lazyPut<ImageService>(() => ImageService(), fenix: true);
     Get.lazyPut<FirebaseStorageService>(() => FirebaseStorageService(),
         fenix: true);
+    Get.lazyPut<UserController>(() => UserController(), fenix: true);
   }
 }
