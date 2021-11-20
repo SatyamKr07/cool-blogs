@@ -21,7 +21,7 @@ class Authentication {
       logger.d("user is signed in: ${user.displayName}");
       feedUserData(user);
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => Home()),
       );
     } else {
       logger.d("user is singout");

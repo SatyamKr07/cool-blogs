@@ -57,6 +57,8 @@ class _BuildSwiperState extends State<BuildSwiper> {
                       Expanded(
                         child: InkWell(
                           child: Container(
+                            width: Get.width,
+                            height: Get.width,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(0),
                                 color: Colors.grey[200]),
@@ -66,7 +68,7 @@ class _BuildSwiperState extends State<BuildSwiper> {
                                 constraints:
                                     BoxConstraints(maxHeight: Get.width),
                                 child: CachedNetworkImage(
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
                                   imageUrl: pic,
                                   progressIndicatorBuilder:
                                       (context, url, downloadProgress) =>

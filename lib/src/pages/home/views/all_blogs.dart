@@ -1,26 +1,53 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_blog/src/central/services/my_logger.dart';
 import 'package:cool_blog/src/models/blog_model.dart';
 import 'package:cool_blog/src/pages/home/views/blog_template.dart';
 import 'package:flutter/material.dart';
 
 class AllBlogs extends StatelessWidget {
-  const AllBlogs({Key? key}) : super(key: key);
-
+  AllBlogs({Key? key}) : super(key: key);
+  List<BlogModel> blogList = [];
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        physics: const ClampingScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: 2,
-        itemBuilder: (context, index) {
-          BlogModel blogModel = BlogModel(
-              title: "My first blog",
-              description:
-                  "A blog (a truncation of webpage is a discussion or informational website published on the World Wide Web consisting of discrete, often informal diary-style text entries (posts). Posts are typically displayed in reverse chronological order, so that the most recent post appears first, at the top of the web page.",
-              picList: [
-                "https://bestprofilepictures.com/wp-content/uploads/2021/04/Cool-Profile-Picture.jpg",
-                "https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aW5zdGFncmFtJTIwcHJvZmlsZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
-              ]);
-          return BlogTemplate(blogModel: blogModel);
-        });
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection("blogs").snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+        blogList = snapshot.data!.docs.map((DocumentSnapshot document) {
+          return BlogModel.fromJson(document.data() as Map<String, dynamic>);
+        }).toList();
+        logger.d("blogList", blogList.length.toString());
+
+        return ListView.builder(
+          itemCount: snapshot.data!.docs.length,
+          physics: const ClampingScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            // snapshot.data!.docs.map((DocumentSnapshot document) {
+            // BlogModel blogModel =
+            // BlogModel.fromJson(document.data() as Map<String, dynamic>);
+            // });
+            BlogModel blogModel = blogList[index];
+            return BlogTemplate(blogModel: blogModel);
+          },
+        );
+
+        // ListView(
+        //   physics: const ClampingScrollPhysics(),
+        //   shrinkWrap: true,
+        //   children: snapshot.data!.docs.map((DocumentSnapshot document) {
+        //     BlogModel blogModel =
+        //         BlogModel.fromJson(document.data() as Map<String, dynamic>);
+        //     return BlogTemplate(blogModel: blogModel);
+        //   }).toList(),
+        // );
+      },
+    );
   }
 }

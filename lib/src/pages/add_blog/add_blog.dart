@@ -19,30 +19,38 @@ class AddBlog extends StatelessWidget {
         actions: [
           ElevatedButton(
             onPressed: () async {
-              await addBlogController.uploadImages();
+              await addBlogController.postBlog();
+
               logger.d('imagesUrl :${addBlogController.blogModel.picList}');
             },
             child: const Text('Upload'),
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          TitleDesc(),
-          CategoryDropdown(),
-          const Padding(
-            padding: EdgeInsets.only(left: 16.0),
-            child: Text("Choose/Click pics"),
-          ),
-          AddPic(),
-          GetBuilder<AddBlogController>(
-            id: "ADD_IMAGES_SWIPER",
-            builder: (_) => BuildSwiper(
-              picList: addBlogController.imagesPath,
-              editPage: true,
-            ),
-          )
-        ],
+      body: GetBuilder<AddBlogController>(
+        id: 'ADD_BLOG_PAGE',
+        builder: (_) {
+          return _.isUploading == true
+              ? const CircularProgressIndicator()
+              : ListView(
+                  children: [
+                    TitleDesc(),
+                    CategoryDropdown(),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 16.0),
+                      child: Text("Choose/Click pics"),
+                    ),
+                    AddPic(),
+                    GetBuilder<AddBlogController>(
+                      id: "ADD_IMAGES_SWIPER",
+                      builder: (_) => BuildSwiper(
+                        picList: addBlogController.imagesPath,
+                        editPage: true,
+                      ),
+                    )
+                  ],
+                );
+        },
       ),
     );
   }

@@ -1,12 +1,15 @@
+import 'package:cool_blog/src/central/services/user_controller.dart';
 import 'package:cool_blog/src/pages/add_blog/add_blog.dart';
 import 'package:cool_blog/src/pages/home/views/all_blogs.dart';
 import 'package:cool_blog/src/pages/home/views/category_filter_dropdown.dart';
 import 'package:cool_blog/src/pages/profile/profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/route_manager.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  Home({Key? key}) : super(key: key);
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +21,11 @@ class Home extends StatelessWidget {
             onTap: () {
               Get.to(() => ProfilePage());
             },
-            child: const CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://i.pinimg.com/550x/7d/1a/3f/7d1a3f77eee9f34782c6f88e97a6c888.jpg"),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      userController.appUser.profilePic.toString())),
             ),
           )
         ],
@@ -28,8 +33,8 @@ class Home extends StatelessWidget {
       body: ListView(
         physics: const ClampingScrollPhysics(),
         shrinkWrap: true,
-        children: const [
-          CategoryFilterDropdown(),
+        children: [
+          const CategoryFilterDropdown(),
           AllBlogs(),
         ],
       ),

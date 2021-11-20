@@ -16,7 +16,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: _isSigningIn
-          ? CircularProgressIndicator(
+          ? const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             )
           : OutlinedButton(
@@ -42,7 +42,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
 
                 if (user != null) {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const Home()),
+                    MaterialPageRoute(builder: (context) => Home()),
                   );
                 }
               },

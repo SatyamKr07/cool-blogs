@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_blog/src/central/services/firebase_services.dart';
 import 'package:cool_blog/src/central/services/image_service.dart';
 import 'package:cool_blog/src/central/services/my_logger.dart';
 import 'package:cool_blog/src/models/blog_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,6 +17,9 @@ class AddBlogController extends GetxController {
   final imageService = Get.find<ImageService>();
   final firebaseServices = Get.find<FirebaseStorageService>();
   bool isUploading = false;
+
+  final CollectionReference _mainCollection =
+      FirebaseFirestore.instance.collection('blogs');
 
   List<XFile>? multiImages;
   List<String> imagesPath = [];
@@ -44,7 +49,6 @@ class AddBlogController extends GetxController {
   }
 
   Future uploadImages() async {
-    isUploading = true;
     try {
       await firebaseServices.uploadImageToFirebaseStorage(
         imagesPath: imagesPath,
@@ -52,8 +56,34 @@ class AddBlogController extends GetxController {
       );
     } catch (e) {
       logger.e('error in uploading images $e');
-    } finally {
+    } finally {}
+  }
+
+  Future postBlog() async {
+    isUploading = true;
+    update(['ADD_BLOG_PAGE']);
+    feedBlogData();
+    try {
+      await uploadImages();
+      _mainCollection
+          .add(blogModel.toJson())
+          .then((docRef) {})
+          .catchError((error) {});
+    } catch (e) {
+      logger.e(e);
       isUploading = false;
+      update(['ADD_BLOG_PAGE']);
+    } finally {
+      blogModel = BlogModel(picList: [], category: "*choose category");
+      isUploading = false;
+      // update(['ADD_BLOG_PAGE']);
+      Get.back();
+      Get.back();
     }
+  }
+
+  feedBlogData() {
+    blogModel.title = titleCtrl.text;
+    blogModel.description = descCtrl.text;
   }
 }
