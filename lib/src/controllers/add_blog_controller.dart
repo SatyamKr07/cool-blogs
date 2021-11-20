@@ -13,7 +13,7 @@ class AddBlogController extends GetxController {
   TextEditingController descCtrl = TextEditingController();
 
   final imageService = Get.find<ImageService>();
-  final firebaseStorageService = Get.find<FirebaseStorageService>();
+  final firebaseServices = Get.find<FirebaseStorageService>();
   bool isUploading = false;
 
   List<XFile>? multiImages;
@@ -46,7 +46,7 @@ class AddBlogController extends GetxController {
   Future uploadImages() async {
     isUploading = true;
     try {
-      await firebaseStorageService.uploadImageToFirebaseStorage(
+      await firebaseServices.uploadImageToFirebaseStorage(
         imagesPath: imagesPath,
         imagesUrlToStore: blogModel.picList,
       );
