@@ -12,7 +12,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
@@ -30,15 +30,18 @@ class _SignInScreenState extends State<SignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     SizedBox(height: 20),
-                    Text(
-                      'FlutterFire',
-                      style: TextStyle(
-                        color: Colors.yellow,
-                        fontSize: 40,
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        'Welcome to Cool Blogs',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 40,
+                        ),
                       ),
                     ),
                     Text(
-                      'Authentication',
+                      'Please Sign in',
                       style: TextStyle(
                         color: Colors.orange,
                         fontSize: 40,

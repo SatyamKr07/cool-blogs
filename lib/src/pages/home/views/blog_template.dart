@@ -9,6 +9,7 @@ class BlogTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
           leading: const CircleAvatar(
@@ -18,7 +19,13 @@ class BlogTemplate extends StatelessWidget {
           title: Text(blogModel.title),
         ),
         BuildSwiper(picList: blogModel.picList),
-        Text(blogModel.title),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8),
+          child: Wrap(children: [
+            Text(blogModel.title),
+            Text(" #${blogModel.category}")
+          ]),
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlogDescription(blogModel: blogModel),

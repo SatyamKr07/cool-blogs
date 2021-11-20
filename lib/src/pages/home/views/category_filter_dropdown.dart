@@ -10,15 +10,15 @@ class CategoryFilterDropdown extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: GetBuilder<HomeController>(
-        id: "CATEGORY_DROPDOWN",
+        id: "FILTER_CATEGORY_DROPDOWN",
         builder: (_) => DropdownButton<String>(
           // value: _.blogModel.category,
-          value: "All Posts",
-          // onChanged: _.selectCategory,
+          value: _.filterCategory,
+          onChanged: _.changeFilter,
           items: const [
             DropdownMenuItem(
               value: "All Posts",
-              child: Text('Choose Category'),
+              child: Text('All Posts'),
             ),
             DropdownMenuItem(
               value: "sports",
