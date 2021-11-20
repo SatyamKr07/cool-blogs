@@ -1,4 +1,4 @@
-import 'package:cool_blog/src/central/services/firebase_storage_service.dart';
+import 'package:cool_blog/src/central/services/firebase_services.dart';
 import 'package:cool_blog/src/central/services/image_service.dart';
 import 'package:cool_blog/src/central/services/my_logger.dart';
 import 'package:cool_blog/src/models/blog_model.dart';

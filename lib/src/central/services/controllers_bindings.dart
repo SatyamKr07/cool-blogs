@@ -3,7 +3,7 @@ import 'package:cool_blog/src/controllers/add_blog_controller.dart';
 import 'package:cool_blog/src/controllers/home_controller.dart';
 import 'package:get/instance_manager.dart';
 
-import 'firebase_storage_service.dart';
+import 'firebase_services.dart';
 
 class ControllerBinding extends Bindings {
   @override
