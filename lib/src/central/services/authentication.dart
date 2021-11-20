@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_blog/src/central/services/user_controller.dart';
 import 'package:cool_blog/src/models/user_model.dart';
 import 'package:cool_blog/src/pages/home/home.dart';
@@ -96,13 +97,12 @@ class Authentication {
     }
   }
 
-  static UserController feedUserData(User? user) {
+  static feedUserData(User? user) {
     final userController = Get.find<UserController>();
-    userController.appUser.id = user!.displayName!;
+    userController.appUser.id = user!.uid;
     userController.appUser.email = user.email!;
     userController.appUser.displayName = user.displayName!;
     userController.appUser.profilePic = user.photoURL!;
-    return userController;
   }
 
   static Future<void> signOut({required BuildContext context}) async {
@@ -131,5 +131,19 @@ class Authentication {
         style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
       ),
     );
+  }
+
+  CollectionReference usersCol = FirebaseFirestore.instance.collection('users');
+  checkUserExistsInDb() async {
+    // String userId = "";
+    DocumentSnapshot<Object?> userDb =
+        await usersCol.doc(userCtrl.appUser.id).get();
+    return userDb.exists ? true : false;
+  }
+
+  final userCtrl = Get.find<UserController>();
+  createUserDb() async {
+    logger.d("creating createUserDb");
+    await usersCol.doc(userCtrl.appUser.id).set(userCtrl.appUser.toJson());
   }
 }

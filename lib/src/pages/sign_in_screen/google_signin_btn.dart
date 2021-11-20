@@ -10,6 +10,7 @@ class GoogleSignInButton extends StatefulWidget {
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
   bool _isSigningIn = false;
+  Authentication authentication = Authentication();
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,9 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 });
 
                 if (user != null) {
+                  if (await authentication.checkUserExistsInDb()==false) {
+                    await authentication.createUserDb();
+                  }
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => Home()),
                   );
