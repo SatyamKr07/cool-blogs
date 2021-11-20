@@ -21,10 +21,11 @@ class AddBlogController extends GetxController {
   final CollectionReference _mainCollection =
       FirebaseFirestore.instance.collection('blogs');
 
-  List<XFile>? multiImages;
+  List<XFile>? multiImages = [];
   List<String> imagesPath = [];
   Future pickBlogImageFromGallery() async {
-    multiImages = await imageService.getImagesFromGallery();
+    multiImages = (await imageService.getImagesFromGallery());
+    // multiImages!.addAll(await imageService.getImagesFromGallery());
     if (multiImages != null) {
       for (var element in multiImages!) {
         imagesPath.add(element.path);
@@ -36,9 +37,9 @@ class AddBlogController extends GetxController {
   }
 
   Future clickBlogPhoto() async {
-    var imageFile = await imageService.getPhotoFromCamera();
-    if (imageFile != null) {
-      blogModel.picList.add(imageFile.path);
+    multiImages!.last = (await imageService.getPhotoFromCamera());
+    if (multiImages != null) {
+      imagesPath.add(multiImages!.last.path);
       update(['ADD_IMAGES_SWIPER']);
     }
   }
@@ -60,9 +61,13 @@ class AddBlogController extends GetxController {
   }
 
   Future postBlog() async {
-    isUploading = true;
     update(['ADD_BLOG_PAGE']);
     feedBlogData();
+    if (!validateData()) {
+      Get.snackbar("Opps!", "All *marked fields are compusory");
+      return;
+    }
+    isUploading = true;
     try {
       await uploadImages();
       _mainCollection
@@ -85,5 +90,15 @@ class AddBlogController extends GetxController {
   feedBlogData() {
     blogModel.title = titleCtrl.text;
     blogModel.description = descCtrl.text;
+  }
+
+  validateData() {
+    if (blogModel.title == "" ||
+        blogModel.description == "" ||
+        imagesPath.isEmpty ||
+        blogModel.category == "*choose category") {
+      return false;
+    }
+    return true;
   }
 }

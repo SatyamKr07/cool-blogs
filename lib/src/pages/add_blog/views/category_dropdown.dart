@@ -19,7 +19,7 @@ class CategoryDropdown extends StatelessWidget {
           items: const [
             DropdownMenuItem(
               value: "*choose category",
-              child: Text('Choose Category'),
+              child: Text('*Choose Category'),
             ),
             DropdownMenuItem(
               value: "sports",

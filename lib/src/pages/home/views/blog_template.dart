@@ -1,11 +1,14 @@
+import 'package:cool_blog/src/central/services/user_controller.dart';
 import 'package:cool_blog/src/central/widgets/build_swiper.dart';
 import 'package:cool_blog/src/models/blog_model.dart';
 import 'package:cool_blog/src/pages/home/views/blog_description.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 
 class BlogTemplate extends StatelessWidget {
   BlogTemplate({Key? key, required this.blogModel}) : super(key: key);
   BlogModel blogModel = BlogModel(picList: []);
+  final userController = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -16,7 +19,7 @@ class BlogTemplate extends StatelessWidget {
             backgroundImage: NetworkImage(
                 "https://bestprofilepictures.com/wp-content/uploads/2021/04/Cool-Profile-Picture.jpg"),
           ),
-          title: Text(blogModel.title),
+          title: Text(userController.appUser.displayName),
         ),
         BuildSwiper(picList: blogModel.picList),
         Padding(

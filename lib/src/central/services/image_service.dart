@@ -11,7 +11,7 @@ class ImageService extends GetxController {
   //Image Service
   final _picker = ImagePicker();
 
-  Future getPhotoFromCamera({bool allowCrop = true}) async {
+  Future getPhotoFromCamera({bool allowCrop = false}) async {
     try {
       final XFile? pickedFile = await _picker.pickImage(
         source: ImageSource.camera,
@@ -21,26 +21,26 @@ class ImageService extends GetxController {
         if (!allowCrop) {
           return pickedFile;
         }
-        File? croppedFile = await ImageCropper.cropImage(
-            sourcePath: pickedFile.path,
-            compressQuality: 5,
-            compressFormat: ImageCompressFormat.png,
-            maxWidth: 700,
-            maxHeight: 700,
-            aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
-            androidUiSettings: const AndroidUiSettings(
-                toolbarTitle: 'Cropper',
-                toolbarColor: Colors.deepOrange,
-                toolbarWidgetColor: Colors.white,
-                initAspectRatio: CropAspectRatioPreset.original,
-                lockAspectRatio: true),
-            iosUiSettings: const IOSUiSettings(
-              title: 'Crop Image (4:3)',
-            ));
+        // File? croppedFile = await ImageCropper.cropImage(
+        //     sourcePath: pickedFile.path,
+        //     compressQuality: 5,
+        //     compressFormat: ImageCompressFormat.png,
+        //     maxWidth: 700,
+        //     maxHeight: 700,
+        //     aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        //     androidUiSettings: const AndroidUiSettings(
+        //         toolbarTitle: 'Cropper',
+        //         toolbarColor: Colors.deepOrange,
+        //         toolbarWidgetColor: Colors.white,
+        //         initAspectRatio: CropAspectRatioPreset.original,
+        //         lockAspectRatio: true),
+        //     iosUiSettings: const IOSUiSettings(
+        //       title: 'Crop Image (4:3)',
+        //     ));
 
-        if (croppedFile != null) {
-          return croppedFile;
-        }
+        // if (croppedFile != null) {
+        //   return croppedFile as XFile;
+        // }
       } else {
         return;
       }

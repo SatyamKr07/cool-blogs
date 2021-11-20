@@ -13,45 +13,44 @@ class AddBlog extends StatelessWidget {
   final addBlogController = Get.find<AddBlogController>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Add Blog"),
-        actions: [
-          ElevatedButton(
-            onPressed: () async {
-              await addBlogController.postBlog();
-
-              logger.d('imagesUrl :${addBlogController.blogModel.picList}');
-            },
-            child: const Text('Upload'),
-          ),
-        ],
-      ),
-      body: GetBuilder<AddBlogController>(
+    return GetBuilder<AddBlogController>(
         id: 'ADD_BLOG_PAGE',
         builder: (_) {
           return _.isUploading == true
-              ? const CircularProgressIndicator()
-              : ListView(
-                  children: [
-                    TitleDesc(),
-                    CategoryDropdown(),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 16.0),
-                      child: Text("Choose/Click pics"),
-                    ),
-                    AddPic(),
-                    GetBuilder<AddBlogController>(
-                      id: "ADD_IMAGES_SWIPER",
-                      builder: (_) => BuildSwiper(
-                        picList: addBlogController.imagesPath,
-                        editPage: true,
+              ? Material(child: Center(child: CircularProgressIndicator()))
+              : Scaffold(
+                  appBar: AppBar(
+                    title: const Text("Add Blog"),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          await addBlogController.postBlog();
+
+                          // logger.d('imagesUrl :${addBlogController.blogModel.picList}');
+                        },
+                        child: const Text('Upload'),
                       ),
-                    )
-                  ],
+                    ],
+                  ),
+                  body: ListView(
+                    children: [
+                      TitleDesc(),
+                      CategoryDropdown(),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 16.0),
+                        child: Text("*Choose/Click pics"),
+                      ),
+                      AddPic(),
+                      GetBuilder<AddBlogController>(
+                        id: "ADD_IMAGES_SWIPER",
+                        builder: (_) => BuildSwiper(
+                          picList: addBlogController.imagesPath,
+                          editPage: true,
+                        ),
+                      )
+                    ],
+                  ),
                 );
-        },
-      ),
-    );
+        });
   }
 }
