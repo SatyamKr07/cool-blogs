@@ -1,30 +1,20 @@
-# cool_blog
+# cool_blogs
 
-A new Flutter project.
+Flutter project for freelancing...
 
-## Getting Started
+## Project Overview
+Architecture - MVC
+State Management - Getx
 
-This project is a starting point for a Flutter application that follows the
-[simple app state management
-tutorial](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple).
+Folder structures:
+In pages folder:
+Home - blogs by all authenticated users.
+Add Blog - allows user to post blogs with multi-images and category (sports/movies)
+Profile - info about authenticated user
+Search - search user using email.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Controllers - has HomCcontroller and AddBlogController
+Central -global reuseable widgets and services (image_service and firebase_service)
 
-## Assets
 
-The `assets` directory houses images, fonts, and any other files you want to
-include with your application.
 
-The `assets/images` directory contains [resolution-aware
-images](https://flutter.dev/docs/development/ui/assets-and-images#resolution-aware).
-
-## Localization
-
-This project generates localized messages based on arb files found in
-the `lib/src/localization` directory.
-
-To support additional languages, please visit the tutorial on
-[Internationalizing Flutter
-apps](https://flutter.dev/docs/development/accessibility-and-localization/internationalization)
