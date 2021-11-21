@@ -25,15 +25,21 @@ class HomeController extends GetxController {
 
     if (filterCategory == "All Posts") {
       logger.d('fetching all posts');
-      return FirebaseFirestore.instance.collection("blogs").snapshots();
+      return FirebaseFirestore.instance
+          .collection("blogs")
+          .orderBy('postedOn')
+          .snapshots();
     } else {
       logger.d("fetching else category = $filterCategory");
       return FirebaseFirestore.instance
           .collection('blogs')
           .where('category', isEqualTo: filterCategory)
+          // .orderBy('postedOn')
           .snapshots();
     }
 
     // .then();
   }
+
+  void handleTagClick(String category) {}
 }

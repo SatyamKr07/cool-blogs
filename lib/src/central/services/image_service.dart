@@ -15,7 +15,7 @@ class ImageService extends GetxController {
     try {
       final XFile? pickedFile = await _picker.pickImage(
         source: ImageSource.camera,
-        imageQuality: 10,
+        imageQuality: 50,
       );
       if (pickedFile != null) {
         if (!allowCrop) {
@@ -51,7 +51,7 @@ class ImageService extends GetxController {
 
   Future getImagesFromGallery() async {
     final List<XFile>? galleryImagesList = await _picker.pickMultiImage(
-      imageQuality: 14,
+      imageQuality: 50,
     );
     if (galleryImagesList != null) {
       return galleryImagesList;
