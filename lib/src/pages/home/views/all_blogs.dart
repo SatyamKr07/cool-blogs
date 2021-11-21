@@ -32,7 +32,7 @@ class AllBlogs extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Padding(
               padding: EdgeInsets.all(16.0),
-              child: Text("Loading..."),
+              child: Center(child: Text("Loading...")),
             );
           }
           blogList = snapshot.data!.docs.map((DocumentSnapshot document) {

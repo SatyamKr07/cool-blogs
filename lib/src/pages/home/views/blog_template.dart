@@ -28,7 +28,7 @@ class BlogTemplate extends StatelessWidget {
         ),
         BuildSwiper(picList: blogModel.picList),
         Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8),
+          padding: const EdgeInsets.only(left: 16.0, right: 16),
           child: Wrap(children: [
             Text(
               blogModel.title,
@@ -51,7 +51,7 @@ class BlogTemplate extends StatelessWidget {
           ]),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: BlogDescription(blogModel: blogModel),
         ),
       ],

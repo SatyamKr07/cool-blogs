@@ -94,6 +94,8 @@ class _SignInScreenState extends State<SignInScreen> {
             },
           ),
           TextField(
+            obscuringCharacter: "*",
+            obscureText: true,
             decoration: const InputDecoration(hintText: 'Password'),
             onChanged: (val) {
               password = val;
@@ -102,12 +104,19 @@ class _SignInScreenState extends State<SignInScreen> {
           SizedBox(height: 20),
           messageText(),
           SizedBox(height: 20),
-          ElevatedButton(
-              child: const Text("Login/Create Account"),
-              onPressed: () {
-                // Authentication authentication = Authentication();
+          GetBuilder<AuthCtrl>(
+              id: "loginBtnId",
+              builder: (_) {
+                return _.isSigningIn
+                    ? Center(
+                        child: CircularProgressIndicator(color: Colors.blue))
+                    : ElevatedButton(
+                        child: const Text("Login/Create Account"),
+                        onPressed: () {
+                          // Authentication authentication = Authentication();
 
-                authCtrl.singInUsingEmail(email, password);
+                          authCtrl.singInUsingEmail(email, password);
+                        });
               })
         ],
       ),

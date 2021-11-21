@@ -17,8 +17,10 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: _isSigningIn
-          ? const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ? Center(
+              child: const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+              ),
             )
           : OutlinedButton(
               style: ButtonStyle(
@@ -34,15 +36,14 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   _isSigningIn = true;
                 });
 
-                User? user =
-                    await AuthCtrl.signInWithGoogle(context: context);
+                User? user = await AuthCtrl.signInWithGoogle(context: context);
 
                 setState(() {
                   _isSigningIn = false;
                 });
 
                 if (user != null) {
-                  if (await authentication.checkUserExistsInDb()==false) {
+                  if (await authentication.checkUserExistsInDb() == false) {
                     await authentication.createUserDb();
                   }
                   Navigator.of(context).pushReplacement(

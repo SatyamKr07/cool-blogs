@@ -16,6 +16,7 @@ import './my_logger.dart';
 
 class AuthCtrl extends GetxController {
   String messageStr = "";
+  bool isSigningIn = false;
 
   checkUser(BuildContext context) async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -27,7 +28,7 @@ class AuthCtrl extends GetxController {
         logger.d(
             "user email ${user.email} not verified, sending verification email");
         messageStr =
-            "Verify your email. Click on verification link and login again.";
+            "Verification link sent to this email. Click to verify then login again.";
         update(["authMsgId"]);
         try {
           await user.sendEmailVerification();
@@ -37,6 +38,7 @@ class AuthCtrl extends GetxController {
         } catch (e) {
           logger.e(e);
           messageStr = e.toString();
+          update(["authMsgId"]);
         } finally {
           Get.offAll(() => SignInScreen());
         }
@@ -167,7 +169,7 @@ class AuthCtrl extends GetxController {
         if (!userCredential.user!.emailVerified) {
           logger.d("user email not verified, sending verification email");
           messageStr =
-              "Verify your email. Click on verification link and login again.";
+              "Verification link sent to this email. Click to verify then login again.";
           update(["authMsgId"]);
           await userCredential.user!.sendEmailVerification();
           debugPrint("verification link sent");
@@ -179,6 +181,8 @@ class AuthCtrl extends GetxController {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         logger.d('The password provided is too weak.');
+        messageStr = "Week password. Write strong password";
+        update(["authMsgId"]);
       } else if (e.code == 'email-already-in-use') {
         logger.d('The account already exists for that email.');
       }
@@ -189,6 +193,8 @@ class AuthCtrl extends GetxController {
 
   singInUsingEmail(String email, String password) async {
     logger.d("in signInUsingEmail", email);
+    isSigningIn = true;
+    update(["loginBtnId"]);
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -198,7 +204,7 @@ class AuthCtrl extends GetxController {
         if (!userCredential.user!.emailVerified) {
           logger.d("user email not verified, sending verification email");
           messageStr =
-              "Verify your email. Click on verification link and login again.";
+              "Verification link sent to this email. Click to verify then login again.";
           update(["authMsgId"]);
 
           await userCredential.user!.sendEmailVerification();
@@ -206,15 +212,24 @@ class AuthCtrl extends GetxController {
           return;
         }
         logger.d("navigating to Home()");
+        messageStr = "";
+        update(["authMsgId"]);
+
         Get.offAll(() => Home());
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         logger.d('No user found for that email.');
+
         createUserUsingEmail(email, password);
       } else if (e.code == 'wrong-password') {
         logger.d('Wrong password provided for that user.');
+        messageStr = "Wrong password";
+        update(["authMsgId"]);
       }
+    } finally {
+      isSigningIn = false;
+      update(["loginBtnId"]);
     }
   }
 
