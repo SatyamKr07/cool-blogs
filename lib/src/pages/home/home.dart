@@ -19,7 +19,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cool Blog"),
+        title: const Text("Cool Blogs"),
         actions: [
           IconButton(
               icon: const Icon(Icons.search),

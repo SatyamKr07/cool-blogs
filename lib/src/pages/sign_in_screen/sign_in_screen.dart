@@ -27,6 +27,7 @@ class _SignInScreenState extends State<SignInScreen> {
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     SizedBox(height: 20),
@@ -40,11 +41,14 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                     ),
-                    Text(
-                      'Please Sign in',
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontSize: 40,
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        'Please Sign in!',
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontSize: 40,
+                        ),
                       ),
                     ),
                   ],
