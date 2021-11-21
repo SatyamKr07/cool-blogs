@@ -1,4 +1,4 @@
-import 'package:cool_blog/src/central/services/authentication.dart';
+import 'package:cool_blog/src/central/services/auth_ctrl.dart';
 import 'package:cool_blog/src/pages/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ class GoogleSignInButton extends StatefulWidget {
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
   bool _isSigningIn = false;
-  Authentication authentication = Authentication();
+  AuthCtrl authentication = AuthCtrl();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 });
 
                 User? user =
-                    await Authentication.signInWithGoogle(context: context);
+                    await AuthCtrl.signInWithGoogle(context: context);
 
                 setState(() {
                   _isSigningIn = false;

@@ -30,14 +30,22 @@ class BlogTemplate extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8),
           child: Wrap(children: [
-            Text(blogModel.title),
+            Text(
+              blogModel.title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                //  fontSize: 16
+              ),
+            ),
             InkWell(
               onTap: () {
                 homeController.changeFilter(blogModel.category);
               },
               child: Text(
                 " #${blogModel.category}",
-                style: const TextStyle(color: Colors.blue),
+                style: const TextStyle(
+                  color: Colors.blue,
+                ),
               ),
             )
           ]),

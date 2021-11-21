@@ -1,9 +1,9 @@
-import 'package:cool_blog/src/central/services/authentication.dart';
+import 'package:cool_blog/src/central/services/auth_ctrl.dart';
 import 'package:cool_blog/src/central/services/user_controller.dart';
 import 'package:cool_blog/src/pages/sign_in_screen/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
+import 'package:get/get.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({
@@ -58,17 +58,8 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(),
-              userController.appUser.profilePic != null
+              userController.appUser.profilePic == ""
                   ? ClipOval(
-                      child: Material(
-                        color: Colors.grey.withOpacity(0.3),
-                        child: Image.network(
-                          userController.appUser.profilePic.toString(),
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                    )
-                  : ClipOval(
                       child: Material(
                         color: Colors.grey.withOpacity(0.3),
                         child: const Padding(
@@ -78,6 +69,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             size: 60,
                             color: Colors.grey,
                           ),
+                        ),
+                      ),
+                    )
+                  : ClipOval(
+                      child: Material(
+                        color: Colors.grey.withOpacity(0.3),
+                        child: Image.network(
+                          userController.appUser.profilePic.toString(),
+                          fit: BoxFit.fitHeight,
                         ),
                       ),
                     ),
@@ -134,12 +134,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         setState(() {
                           _isSigningOut = true;
                         });
-                        await Authentication.signOut(context: context);
+                        await AuthCtrl.signOut(context: context);
                         setState(() {
                           _isSigningOut = false;
                         });
-                        Navigator.of(context)
-                            .pushReplacement(_routeToSignInScreen());
+                        Get.offAll(() => SignInScreen());
                       },
                       child: const Padding(
                         padding: EdgeInsets.only(top: 8.0, bottom: 8.0),

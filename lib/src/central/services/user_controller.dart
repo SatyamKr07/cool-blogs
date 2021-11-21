@@ -6,6 +6,7 @@ import 'my_logger.dart';
 
 class UserController extends GetxController {
   UserModel appUser = UserModel();
+  
 
 Stream<QuerySnapshot> filterUser(emailQuery) {
     // logger.d('category $category');

@@ -2,33 +2,57 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_blog/src/central/services/user_controller.dart';
 import 'package:cool_blog/src/models/user_model.dart';
 import 'package:cool_blog/src/pages/home/home.dart';
+import 'package:cool_blog/src/pages/sign_in_screen/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import './my_logger.dart';
 
-class Authentication {
-  static Future<FirebaseApp> initializeFirebase(
-      {required BuildContext context}) async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
+class AuthCtrl extends GetxController {
+  String messageStr = "";
 
+  checkUser(BuildContext context) async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      logger.d("user is signed in: ${user.displayName}");
       feedUserData(user);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => Home()),
-      );
+      logger.d("user isn't null");
+      if (!user.emailVerified) {
+        logger.d(
+            "user email ${user.email} not verified, sending verification email");
+        messageStr =
+            "Verify your email. Click on verification link and login again.";
+        update(["authMsgId"]);
+        try {
+          await user.sendEmailVerification();
+          user.reload();
+
+          debugPrint("verification link sent");
+        } catch (e) {
+          logger.e(e);
+          messageStr = e.toString();
+        } finally {
+          Get.offAll(() => SignInScreen());
+        }
+      } else {
+        logger.d("user email is verified. checking user exists in db");
+        if (await checkUserExistsInDb() == false) {
+          await createUserDb();
+        }
+
+        logger.d("User exists in db. Nav to Home()");
+        Get.offAll(() => Home());
+      }
     } else {
       logger.d("user is singout");
+      Get.offAll(() => SignInScreen());
     }
-
-    return firebaseApp;
   }
 
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
@@ -70,14 +94,14 @@ class Authentication {
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             ScaffoldMessenger.of(context).showSnackBar(
-              Authentication.customSnackBar(
+              AuthCtrl.customSnackBar(
                 content:
                     'The account already exists with a different credential.',
               ),
             );
           } else if (e.code == 'invalid-credential') {
             ScaffoldMessenger.of(context).showSnackBar(
-              Authentication.customSnackBar(
+              AuthCtrl.customSnackBar(
                 content:
                     'Error occurred while accessing credentials. Try again.',
               ),
@@ -85,7 +109,7 @@ class Authentication {
           }
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
-            Authentication.customSnackBar(
+            AuthCtrl.customSnackBar(
               content: 'Error occurred using Google Sign-In. Try again.',
             ),
           );
@@ -101,8 +125,8 @@ class Authentication {
     final userController = Get.find<UserController>();
     userController.appUser.id = user!.uid;
     userController.appUser.email = user.email!;
-    userController.appUser.displayName = user.displayName!;
-    userController.appUser.profilePic = user.photoURL!;
+    userController.appUser.displayName = user.displayName ?? "";
+    userController.appUser.profilePic = user.photoURL ?? "";
   }
 
   static Future<void> signOut({required BuildContext context}) async {
@@ -116,7 +140,7 @@ class Authentication {
       UserModel myUser = UserModel();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        Authentication.customSnackBar(
+        AuthCtrl.customSnackBar(
           content: 'Error signing out. Try again.',
         ),
       );
@@ -131,6 +155,67 @@ class Authentication {
         style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
       ),
     );
+  }
+
+  createUserUsingEmail(String email, String password) async {
+    logger.d("in createUserUsingEmail");
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      logger.d("users created");
+      if (userCredential.user != null) {
+        if (!userCredential.user!.emailVerified) {
+          logger.d("user email not verified, sending verification email");
+          messageStr =
+              "Verify your email. Click on verification link and login again.";
+          update(["authMsgId"]);
+          await userCredential.user!.sendEmailVerification();
+          debugPrint("verification link sent");
+          return;
+        }
+        logger.d("navigating to Home()");
+        Get.offAll(() => Home());
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        logger.d('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        logger.d('The account already exists for that email.');
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  singInUsingEmail(String email, String password) async {
+    logger.d("in signInUsingEmail", email);
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      if (userCredential.user != null) {
+        feedUserData(userCredential.user);
+        if (!userCredential.user!.emailVerified) {
+          logger.d("user email not verified, sending verification email");
+          messageStr =
+              "Verify your email. Click on verification link and login again.";
+          update(["authMsgId"]);
+
+          await userCredential.user!.sendEmailVerification();
+          debugPrint("verification link sent");
+          return;
+        }
+        logger.d("navigating to Home()");
+        Get.offAll(() => Home());
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        logger.d('No user found for that email.');
+        createUserUsingEmail(email, password);
+      } else if (e.code == 'wrong-password') {
+        logger.d('Wrong password provided for that user.');
+      }
+    }
   }
 
   CollectionReference usersCol = FirebaseFirestore.instance.collection('users');

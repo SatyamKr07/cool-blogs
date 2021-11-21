@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'src/app.dart';
@@ -18,5 +19,6 @@ void main() async {
   // SettingsView.
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp();
   runApp(MyApp(settingsController: settingsController));
 }

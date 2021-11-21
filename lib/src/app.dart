@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
+import 'pages/splash_screen/splash_screen.dart';
 import 'sample_feature/sample_item_details_view.dart';
 import 'sample_feature/sample_item_list_view.dart';
 import 'settings/settings_controller.dart';
@@ -88,7 +89,7 @@ class MyApp extends StatelessWidget {
               },
             );
           },
-          home: SignInScreen(),
+          home: const SplashScreen(),
         );
       },
     );

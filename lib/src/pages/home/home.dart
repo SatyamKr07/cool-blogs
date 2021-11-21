@@ -33,8 +33,13 @@ class Home extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(right: 16.0),
               child: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      userController.appUser.profilePic.toString())),
+                  radius: 16,
+                  backgroundImage: NetworkImage(userController
+                              .appUser.profilePic
+                              .toString() ==
+                          ""
+                      ? "https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"
+                      : userController.appUser.profilePic.toString())),
             ),
           ),
         ],
