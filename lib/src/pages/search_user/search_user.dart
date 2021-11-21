@@ -62,11 +62,13 @@ class _SearchUserState extends State<SearchUser> {
 
   Widget usersListView(List usersList) {
     return ListView.builder(
+      shrinkWrap: true,
       itemCount: usersList.length,
       itemBuilder: (BuildContext context, int index) {
         UserModel user = usersList[index];
         return ListTile(
           title: Text(user.email),
+          subtitle: Text(user.displayName),
         );
       },
     );

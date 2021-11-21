@@ -108,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(height: 24.0),
               Text(
-                'You are now signed in using your Google account. To sign out of your account, click the "Sign Out" button below.',
+                'Welocome to Cool Blogs! Go on...make a post✌',
                 style: TextStyle(
                     color: Colors.grey.withOpacity(0.8),
                     fontSize: 14,
