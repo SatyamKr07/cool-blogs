@@ -16,5 +16,15 @@ Flutter project for freelancing...
 ### Controllers - has HomCcontroller and AddBlogController
 ### Central -global reuseable widgets and services (image_service and firebase_service)
 
+## Cool Features
+
+1. User authentication(Email + Google)
+2. Uploading blogs with user's data and blog category(Sports/Movies).
+3. Uploading images under blogs (Firebase storage).
+4. Mini profile section for the user.
+5. Searching users with email address.
+6. Filtering blogs on two categories (Sports/Movies)
+7. Blog feed with images (Realtime feed with Cloud Firestore and streams).
+
 
 
