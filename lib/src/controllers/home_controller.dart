@@ -27,7 +27,7 @@ class HomeController extends GetxController {
       logger.d('fetching all posts');
       return FirebaseFirestore.instance
           .collection("blogs")
-          .orderBy('postedOn')
+          .orderBy('postedOn', descending: true)
           .snapshots();
     } else {
       logger.d("fetching else category = $filterCategory");

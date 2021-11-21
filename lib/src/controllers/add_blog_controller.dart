@@ -11,6 +11,8 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'home_controller.dart';
+
 class AddBlogController extends GetxController {
   BlogModel blogModel = BlogModel(
     picList: [],
@@ -29,6 +31,7 @@ class AddBlogController extends GetxController {
       FirebaseFirestore.instance.collection('blogs');
 
   final userController = Get.find<UserController>();
+  final homeController = Get.find<HomeController>();
 
   List<XFile>? multiImages = [];
   List<String> imagesPath = [];
@@ -100,16 +103,13 @@ class AddBlogController extends GetxController {
       // update(['ADD_BLOG_PAGE']);
       Get.back();
       Get.back();
+      homeController.changeFilter("All Posts");
     }
   }
 
   feedBlogData() {
     blogModel.title = titleCtrl.text;
     blogModel.description = descCtrl.text;
-    // blogModel.postedBy.id = userController.appUser.id;
-    // blogModel.postedBy.displayName = userController.appUser.displayName;
-    // blogModel.postedBy.email = userController.appUser.email;
-    // blogModel.postedBy.profilePic = userController.appUser.profilePic;
     blogModel.postedBy = userController.appUser;
     blogModel.postedOn = DateTime.now();
   }
