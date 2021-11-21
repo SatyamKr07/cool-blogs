@@ -6,6 +6,7 @@ import 'package:cool_blog/src/models/user_model.dart';
 import 'package:cool_blog/src/pages/home/views/blog_description.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class BlogTemplate extends StatelessWidget {
   BlogTemplate({Key? key, required this.blogModel}) : super(key: key);
@@ -21,6 +22,9 @@ class BlogTemplate extends StatelessWidget {
             backgroundImage: NetworkImage(blogModel.postedBy.profilePic),
           ),
           title: Text(blogModel.postedBy.displayName),
+          subtitle: Text(
+            timeago.format((blogModel.postedOn)),
+          ),
         ),
         BuildSwiper(picList: blogModel.picList),
         Padding(

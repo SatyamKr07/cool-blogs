@@ -23,11 +23,17 @@ class AllBlogs extends StatelessWidget {
         stream: homeController.filterPosts(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text('Something went wrong');
+            return const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('Something went wrong'),
+            );
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
+            return const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text("Loading..."),
+            );
           }
           blogList = snapshot.data!.docs.map((DocumentSnapshot document) {
             return BlogModel.fromJson(document.data() as Map<String, dynamic>);
